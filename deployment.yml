@@ -1,0 +1,36 @@
+apiVersion: apps/v1  # Corrected apiVersion
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-container
+        image: flask-app-img:local
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_ENV
+          value: production
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  selector:
+    app: flask-app
+  ports:
+    - protocol: TCP
+      port: 80            # Internal cluster port
+      targetPort: 5000     # Flask app container port
+      nodePort: 30000      # External access port
+  type: NodePort
