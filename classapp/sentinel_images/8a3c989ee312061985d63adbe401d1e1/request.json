@@ -1,0 +1,87 @@
+{
+    "request": {
+        "headers": {
+            "accept": "image/jpeg",
+            "content-type": "application/json"
+        },
+        "payload": {
+            "evalscript": "\n        //VERSION=3\n        \n        let minVal = 0.0;\n        let maxVal = 0.4;\n        \n        let viz = new HighlightCompressVisualizer(minVal, maxVal);\n        \n        function evaluatePixel(samples) {\n            let val = [samples.B04, samples.B03, samples.B02];\n            val = viz.processList(val);\n            val.push(samples.dataMask);\n            return val;\n        }\n        \n        function setup() {\n          return {\n            input: [{\n              bands: [\n                \"B02\",\n                \"B03\",\n                \"B04\",\n                \"dataMask\"\n              ]\n            }],\n            output: {\n              bands: 4\n            }\n          }\n        }\n        \n        \n            ",
+            "input": {
+                "bounds": {
+                    "geometry": {
+                        "coordinates": [
+                            [
+                                [
+                                    14.570587,
+                                    51.577284
+                                ],
+                                [
+                                    14.570587,
+                                    52.15739
+                                ],
+                                [
+                                    14.772969,
+                                    52.15739
+                                ],
+                                [
+                                    14.772969,
+                                    51.577284
+                                ],
+                                [
+                                    14.570587,
+                                    51.577284
+                                ]
+                            ]
+                        ],
+                        "type": "Polygon"
+                    },
+                    "properties": {
+                        "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                    }
+                },
+                "data": [
+                    {
+                        "dataFilter": {
+                            "mosaickingOrder": "leastCC",
+                            "timeRange": {
+                                "from": "2024-08-25T12:00:00Z",
+                                "to": "2024-09-13T12:00:00Z"
+                            }
+                        },
+                        "type": "sentinel-2-l2a"
+                    }
+                ]
+            },
+            "output": {
+                "height": 512,
+                "responses": [
+                    {
+                        "format": {
+                            "type": "image/jpeg"
+                        },
+                        "identifier": "default"
+                    }
+                ],
+                "width": 512
+            }
+        },
+        "timestamp": "2024-09-16T10:31:53.504916",
+        "url": "https://services.sentinel-hub.com/api/v1/process"
+    },
+    "response": {
+        "elapsed": 1.990286,
+        "headers": {
+            "Connection": "keep-alive",
+            "Content-Type": "image/jpeg",
+            "Date": "Mon, 16 Sep 2024 07:28:38 GMT",
+            "Transfer-Encoding": "chunked",
+            "access-control-allow-credentials": "true",
+            "access-control-allow-headers": "origin,content-type,accept,accept-crs,authorization,cache-control",
+            "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
+            "access-control-allow-origin": "*",
+            "access-control-max-age": "3600",
+            "x-processingunits-spent": "1.0"
+        },
+        "status_code": 200
+    }
+}

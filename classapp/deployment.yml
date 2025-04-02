@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ml-backend
+  template:
+    metadata:
+      labels:
+        app: ml-backend
+    spec:
+      containers:
+      - name: ml-container
+        image: ml-backend:local
+        ports:
+        - containerPort: 5080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-service
+spec:
+  selector:
+    app: ml-backend
+  ports:
+    - protocol: TCP
+      port: 80            # Internal cluster port
+      targetPort: 5080     # ML backend port inside the container
+  type: NodePort          # Switch to NodePort for local Kubernetes

@@ -1,0 +1,16 @@
+torch
+transformers
+Pillow
+Flask
+shapely
+numpy
+Pillow
+requests
+oauthlib
+requests_oauthlib
+folium
+matplotlib
+beautifulsoup4
+sentinelhub
+pytz
+flask-cors
