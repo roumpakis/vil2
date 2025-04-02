@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analysis Page</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+ 
+
+        }
+        header {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 10px; /* Adds space between images */
+            margin-bottom: 2rem;
+  overflow-y: scroll;      /* Vertical scrolling */
+  overflow-x: hidden;      /* Hide horizontal scrolling if not needed */
+  border: 1px solid #ccc;  /* Optional: adds a border for visibility */
+        }
+        .image-container img {
+            width: 48%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1rem;
+  overflow-y: scroll;      /* Vertical scrolling */
+  overflow-x: hidden;      /* Hide horizontal scrolling if not needed */
+  border: 1px solid #ccc;  /* Optional: adds a border for visibility */
+        }
+        .info-container {
+            text-align: left;
+            margin-bottom: 2rem;
+            max-width: 1000px;
+            width: 100%;
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        footer {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+        }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+        gap: 20px; /* Space between grid items */
+        width: 100%; /* Full width of the page */
+        height: auto; /* Adjust height automatically */
+        margin: 0; /* Remove any horizontal margins */
+    }
+
+    .image-item {
+        text-align: center; /* Center-align titles and images */
+        width: 100%; /* Ensure full column width */
+    }
+
+    .image-item img {
+        width: 100%; /* Image fills the grid column */
+        height: auto; /* Maintain aspect ratio */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+    }
+
+    .image-item p {
+        margin-bottom: 10px; /* Space between title and image */
+        font-size: 1.2rem; /* Make the text slightly larger */
+    }
+
+    </style>
+</head>
+<body  style="margin: 0; padding: 0; height: 100%; overflow-y: scroll;">
+    <header>
+        <h1>AI Analysis</h1>
+    </header>
+    <main>
+        <h2>Event ID: {{ event_id }}</h2>
+        <h2><strong>Reason:</strong> {{ reason }}</h2>
+<!-- 
+        <div class="image-container">
+            <img id="beforeImage" src="" alt="Before Event Image">
+            <img id="afterImage" src="" alt="After Event Image">
+        </div>
+        <div class="image-container">
+            <img id="changeMaskImage" src="" alt="Change Mask Image">
+            <img id="diffImage" src="" alt="Difference Image">
+        </div>
+    
+-->
+
+<div class="image-grid">
+    <div class="image-item">
+        <p><strong>Before Event Image</strong></p>
+        <img id="beforeImage" src="" alt="Before Event Image">
+    </div>
+    <div class="image-item">
+        <p><strong>After Event Image</strong></p>
+        <img id="afterImage" src="" alt="After Event Image">
+    </div>
+    <div class="image-item">
+        <p><strong>Change Mask Image</strong></p>
+        <img id="changeMaskImage" src="" alt="Change Mask Image">
+    </div>
+    <div class="image-item">
+        <p><strong>Difference Image</strong></p>
+        <img id="diffImage" src="" alt="Difference Image">
+    </div>
+</div>
+
+
+</main>
+    <footer>
+        <p>© 2024 SPL-ICS-FORTH. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch(`/get_overlay/{{ event_id }}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.before_image) {
+                        document.getElementById('beforeImage').src = data.before_image;
+                    } else {
+                        document.getElementById('beforeImage').alt = 'Before image not available.';
+                    }
+
+                    if (data.after_image) {
+                        document.getElementById('afterImage').src = data.after_image;
+                    } else {
+                        document.getElementById('afterImage').alt = 'After image not available.';
+                    }
+
+                    if (data.change_mask) {
+                        document.getElementById('changeMaskImage').src = 'data:image/png;base64,' + data.change_mask;
+                    } else {
+                        document.getElementById('changeMaskImage').alt = 'Change mask not available.';
+                    }
+
+                    if (data.diff_image) {
+                        document.getElementById('diffImage').src = 'data:image/png;base64,' + data.diff_image;
+                    } else {
+                        document.getElementById('diffImage').alt = 'Difference image not available.';
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('beforeImage').alt = 'Failed to load before image.';
+                    document.getElementById('afterImage').alt = 'Failed to load after image.';
+                    document.getElementById('changeMaskImage').alt = 'Failed to load change mask image.';
+                    document.getElementById('diffImage').alt = 'Failed to load difference image.';
+                });
+        });
+    </script>
+</body>
+</html>

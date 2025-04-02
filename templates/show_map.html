@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .text-column {
+            width: 20%;
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .content-column {
+            width: 80%;
+            padding-left: 20px;
+        }
+        .image-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .image-row img {
+            width: 48%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .map-container {
+            width: 100%;
+            height: 400px; /* Ύψος του χάρτη */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AI Analysis</h1>
+
+    <div class="container">
+        <div class="text-column">
+            <h2>Event ID: {{ event_id }}</h2>
+            <h3><strong>Reason:</strong> {{ reason }}</h3>
+        </div>
+        <div class="content-column">
+            <div class="image-row">
+                <img src="{{ before_image }}" alt="Before Event">
+                <img src="{{ after_image }}" alt="After Event">
+            </div>
+
+            <!-- Κουμπί για να δείτε τον χάρτη -->
+            <div class="map-container">
+                <a href="{{ url_for('show_map', event_id=event_id) }}" class="btn btn-primary">
+                    Show Map
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
